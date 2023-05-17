@@ -1,5 +1,5 @@
 export interface Quarto {
-    id?: number;
+    id?: string;
     dailyValue: number;
     bedType: string;
     roomType: string;

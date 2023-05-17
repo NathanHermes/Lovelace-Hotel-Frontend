@@ -1,5 +1,5 @@
 export interface Hospede {
-    id?: number;
+    id?: string;
     nome: string;
     sobrenome: string;
     cpf: string;
