@@ -14,12 +14,12 @@ export async function update(id: number ,room: Quarto) {
     })
 }
 
-export async function findBy(id: number) {
+export async function findById(id: number) {
     API.get(`/room/findBy/${id}`)
 }
 
-export async function deleteBy(id: number) {
-    API.get(`/room/delete/${id}`)
+export async function deleteById(id: number) {
+    API.delete(`/room/delete/${id}`)
 }
 
 export async function getAll() {
