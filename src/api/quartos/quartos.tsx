@@ -9,7 +9,7 @@ export async function save(room: Quarto) {
 }
 
 export async function update(id: number ,room: Quarto) {
-    API.put(`/room/save/${id}`, {
+    API.put(`/room/update/${id}`, {
         ...room
     })
 }
