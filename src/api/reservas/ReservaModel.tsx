@@ -1,6 +1,7 @@
 export interface Reserva {
-    idClient: number;
-    idRoom: number;
+    id?: string;
+    client_id: number;
+    room_id: number;
     startingDate: string;
     finalDate: string;
 }
