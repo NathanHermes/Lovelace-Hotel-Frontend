@@ -9,9 +9,10 @@ interface Person {
 
 type ColumnTitleProps = {
   columnTitles: Array<string>;
+  data: Array<any>
 };
 
-export function Table({ columnTitles }: ColumnTitleProps) {
+export function Table({columnTitles, data}: ColumnTitleProps) {
   const mockBookings: Person[] = [];
 
   for (let i = 0; i < 10; i++) {
