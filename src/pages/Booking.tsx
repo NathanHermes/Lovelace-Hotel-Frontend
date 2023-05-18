@@ -8,8 +8,8 @@ export function Booking() {
   return (
     <>
       <Navbar pathActive={"/"} />
-      <main>
-        <Header />
+      <main className="flex flex-col gap-10 items-center justify-center w-full ">
+        <Header title="Reserva" />
         <Table columnTitles={_columnTitles} />
       </main>
     </>
