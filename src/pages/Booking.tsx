@@ -8,13 +8,25 @@ import { getAll } from "../api/reservas/reservas";
 export function Booking() {
   const [bookings, useBookings] = useState([]);
 
-  // useEffect(() => {
-  //   getAll().then((res) => {
-  //     useBookings(res.data);
-  //   });
-  // }, []);
+  useEffect(() => {
+     getAll().then((res) => {
 
-  const _columnTitles = ["Nome", "CPF", "E-mail", "Telefone"];
+      const transformedData = res.data.map((item: any) => {
+        return {
+          id: item.id,
+          client: `${item.client.name} ${item.client.surname}`,
+          dailyValue: item.room.dailyValue,
+          room: item.room.id,
+          start: item.startingDate,
+          end: item.finalDate
+        }
+      })
+
+       useBookings(transformedData);
+    });
+   }, []);
+
+  const _columnTitles = ["ID", "Hóspede", "Diária", "ID Quarto", "Início", "Fim"];
 
   return (
     <>

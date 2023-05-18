@@ -1,13 +1,6 @@
 import { faker } from "@faker-js/faker";
-import { RiDeleteBinLine } from "react-icons/Ri";
-import { HiOutlinePencilAlt } from "react-icons/Hi";
-
-interface Person {
-  name: string;
-  cpf: string;
-  email: string;
-  phone: string;
-}
+import { RiDeleteBinLine } from "react-icons/ri";
+import { HiOutlinePencilAlt } from "react-icons/hi";
 
 type ColumnTitleProps = {
   columnTitles: Array<string>;
@@ -15,19 +8,6 @@ type ColumnTitleProps = {
 };
 
 export function Table({ columnTitles, data }: ColumnTitleProps) {
-  const mockBookings: Person[] = [];
-
-  for (let i = 0; i < 10; i++) {
-    const person: Person = {
-      name: faker.person.fullName(),
-      cpf: faker.string.numeric(11),
-      email: faker.internet.email(),
-      phone: faker.phone.number("+55 ## #####-####"),
-    };
-
-    mockBookings.push(person);
-  }
-
   return (
     <table className="w-full">
       <thead className="w-full bg-amber-100">
@@ -44,22 +24,27 @@ export function Table({ columnTitles, data }: ColumnTitleProps) {
       </thead>
 
       <tbody className="w-full py-3">
-        {mockBookings.map((booking) => {
+        {data.map((item) => {
           return (
-            <tr key={booking.cpf} className="w-full ">
-              {Object.entries(booking).map((column) => {
-                return <td className="p-3">{column}</td>;
-              })}
+            <tr key={item.id} className="w-full ">
+
+            {Object.keys(item).map((key) => {
+              return (
+                <td className="p-3">{item[key]}</td>
+              );
+            })}
+
               <td className="p-3 space-x-2">
                 <button className="bg-green-500 p-2">
                   <HiOutlinePencilAlt size={18} className="text-zinc-900" />
                 </button>
+
                 <button className="bg-red-500 p-2">
                   <RiDeleteBinLine size={18} className="text-zinc-900" />
                 </button>
               </td>
             </tr>
-          );
+          )
         })}
       </tbody>
     </table>
