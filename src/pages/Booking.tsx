@@ -1,8 +1,19 @@
+import { useEffect, useState } from "react";
 import { Header } from "../components/Header";
 import { Navbar } from "../components/Navbar";
 import { Table } from "../components/Table";
 
+import { getAll } from "../api/reservas/reservas";
+
 export function Booking() {
+  const [bookings, useBookings] = useState([])
+
+  useEffect(() => {
+    getAll().then((res) => {
+      useBookings(res.data);
+    })
+  }, []);
+
   const _columnTitles = ["Nome", "CPF", "E-mail", "Telefone"];
 
   return (
@@ -10,7 +21,7 @@ export function Booking() {
       <Navbar pathActive={"/"} />
       <main>
         <Header />
-        <Table columnTitles={_columnTitles} />
+        <Table columnTitles={_columnTitles} data={bookings}/>
       </main>
     </>
   );
