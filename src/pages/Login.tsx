@@ -1,22 +1,41 @@
 import React, { useState, ChangeEvent } from "react";
 
+import { useNavigate } from "react-router-dom";
+
+import { Funcionario } from "../api/funcionarios/FuncionarioModel";
+import { login } from "../api/funcionarios/funcionarios";
+
 const Login: React.FC = () => {
-  const [email, setEmail] = useState("");
+  const navigate = useNavigate();
+
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
+  const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.target.value);
   };
 
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
 
-  const handleLogin = () => {
-    // Lógica de autenticação aqui...
-    console.log("Email:", email);
-    console.log("Password:", password);
-  };
+  const handleLogin = (e: any) => {
+    e.preventDefault();
+
+    const funcionario = {
+      username,
+      password
+    }
+
+    login(funcionario)
+    .then((res) => {
+      localStorage.setItem('isLogged', "true");
+      navigate("/client")
+    })
+    .catch((err) => {
+      alert(err.response.data);
+    })
+  }
 
   return (
     <div className="flex items-center justify-center h-screen">
@@ -28,17 +47,17 @@ const Login: React.FC = () => {
               <div className="mb-4">
                 <label
                   className="block text-gray-700 text-sm font-bold mb-2"
-                  htmlFor="email"
+                  htmlFor="username"
                 >
-                  E-mail
+                  Username
                 </label>
                 <input
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="email"
-                  type="email"
-                  placeholder="Digite seu e-mail"
-                  value={email}
-                  onChange={handleEmailChange}
+                  id="username"
+                  type="text"
+                  placeholder="Digite seu username"
+                  value={username}
+                  onChange={handleUsernameChange}
                 />
               </div>
               <div className="mb-6">
@@ -60,7 +79,7 @@ const Login: React.FC = () => {
               </div>
               <div className="flex items-center justify-between">
                 <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  className="bg-blue-500 w-full hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                   type="button"
                   onClick={handleLogin}
                 >
@@ -69,7 +88,7 @@ const Login: React.FC = () => {
               </div>
             </form>
           </div>
-          <div className="w-1/3 flex items-center justify-center bg-gray-200 p-4">
+          <div className="w-1/3 flex items-center justify-center p-4">
             <p className="text-lg text-gray-800">
               Desfrute de uma estadia extraordinária no nosso hotel!
             </p>
