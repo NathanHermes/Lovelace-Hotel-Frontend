@@ -1,4 +1,3 @@
-import { faker } from "@faker-js/faker";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { HiOutlinePencilAlt } from "react-icons/hi";
 
