@@ -1,4 +1,6 @@
 import { faker } from "@faker-js/faker";
+import { RiDeleteBinLine } from "react-icons/Ri";
+import { HiOutlinePencilAlt } from "react-icons/Hi";
 
 interface Person {
   name: string;
@@ -9,10 +11,10 @@ interface Person {
 
 type ColumnTitleProps = {
   columnTitles: Array<string>;
-  data: Array<any>
+  data: Array<any>;
 };
 
-export function Table({columnTitles, data}: ColumnTitleProps) {
+export function Table({ columnTitles, data }: ColumnTitleProps) {
   const mockBookings: Person[] = [];
 
   for (let i = 0; i < 10; i++) {
@@ -48,8 +50,13 @@ export function Table({columnTitles, data}: ColumnTitleProps) {
               {Object.entries(booking).map((column) => {
                 return <td className="p-3">{column}</td>;
               })}
-              <td className="p-3">
-                <button>E</button> <button>D</button>
+              <td className="p-3 space-x-2">
+                <button className="bg-green-500 p-2">
+                  <HiOutlinePencilAlt size={18} className="text-zinc-900" />
+                </button>
+                <button className="bg-red-500 p-2">
+                  <RiDeleteBinLine size={18} className="text-zinc-900" />
+                </button>
               </td>
             </tr>
           );
