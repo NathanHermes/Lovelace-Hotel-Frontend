@@ -9,10 +9,10 @@ export const routes = createBrowserRouter([
   {
     element: <App />,
     children: [
-      { path: "/", element: <Booking /> },
+      { path: "/booking", element: <Booking /> },
       { path: "/client", element: <Client /> },
       { path: "/room", element: <Room /> },
-      { path: "/login", element: <Login /> },
+      { path: "/", element: <Login /> },
     ],
   },
 ]);
