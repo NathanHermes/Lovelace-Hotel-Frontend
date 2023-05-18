@@ -3,7 +3,7 @@ import { Header } from "../components/Header";
 import { Navbar } from "../components/Navbar";
 import { Table } from "../components/Table";
 
-import { getAll } from "../api/quartos/quartos";
+import { getAll, deleteById } from "../api/quartos/quartos";
 
 export function Room() {
   const [rooms, useRooms] = useState([]);
@@ -23,6 +23,16 @@ export function Room() {
     });
   }, []);
 
+  const deleteRoom = (id: string) => {
+    deleteById(id)
+    .then((res) => {
+      window.location.reload();
+    })
+    .catch((err) => {
+      alert(err.response.data);
+    })
+  }
+
   const _columnTitles = ["ID", "Diária", "Tipo de quarto", "Tipo de cama"];
 
   return (
@@ -30,7 +40,7 @@ export function Room() {
       <Navbar pathActive={"/room"} />
       <main className="flex flex-col gap-10 items-center justify-center w-full ">
         <Header title="Quarto" />
-        <Table columnTitles={_columnTitles} data={rooms}/>
+        <Table columnTitles={_columnTitles} data={rooms} deleteFunction={deleteRoom}/>
       </main>
     </>
   );

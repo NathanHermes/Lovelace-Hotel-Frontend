@@ -3,7 +3,7 @@ import { Header } from "../components/Header";
 import { Navbar } from "../components/Navbar";
 import { Table } from "../components/Table";
 
-import { getAll } from "../api/hospedes/hospedes";
+import { getAll, deleteById } from "../api/hospedes/hospedes";
 
 export function Client() {
   const [clients, useClients] = useState([]);
@@ -24,6 +24,16 @@ export function Client() {
       useClients(transformedData);
     });
    }, []);
+
+   const deleteClient = (id: string) => {
+    deleteById(id)
+    .then((res) => {
+      window.location.reload();
+    })
+    .catch((err) => {
+      alert(err.response.data);
+    })
+  }
   
   const _columnTitles = ["ID", "Nome", "CPF", "Email", "Telefone"];
 
@@ -32,7 +42,7 @@ export function Client() {
       <Navbar pathActive={"/client"} />
       <main className="flex flex-col gap-10 items-center justify-center w-full ">
         <Header title="Hóspede" />
-        <Table columnTitles={_columnTitles} data={clients}/>
+        <Table columnTitles={_columnTitles} data={clients} deleteFunction={deleteClient}/>
       </main>
     </>
   );

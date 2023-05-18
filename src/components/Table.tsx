@@ -1,12 +1,19 @@
 import { RiDeleteBinLine } from "react-icons/ri";
 import { HiOutlinePencilAlt } from "react-icons/hi";
+import { MouseEventHandler } from "react";
 
 type ColumnTitleProps = {
   columnTitles: Array<string>;
   data: Array<any>;
+  deleteFunction: (id: string) => any;
 };
 
-export function Table({ columnTitles, data }: ColumnTitleProps) {
+export function Table({ columnTitles, data, deleteFunction }: ColumnTitleProps) {
+  const deleteRow = (e: any, id: string) => {
+    e.preventDefault();
+    deleteFunction(id);
+  }
+
   return (
     <table className="w-full">
       <thead className="w-full bg-amber-100">
@@ -38,7 +45,7 @@ export function Table({ columnTitles, data }: ColumnTitleProps) {
                   <HiOutlinePencilAlt size={18} className="text-zinc-900" />
                 </button>
 
-                <button className="bg-red-500 p-2">
+                <button className="bg-red-500 p-2" onClick={(e) => deleteRow(e, item.id)}>
                   <RiDeleteBinLine size={18} className="text-zinc-900" />
                 </button>
               </td>
