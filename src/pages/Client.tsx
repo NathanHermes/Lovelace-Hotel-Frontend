@@ -4,11 +4,16 @@ import { Navbar } from "../components/Navbar";
 import { Table } from "../components/Table";
 
 import { getAll, deleteById } from "../api/hospedes/hospedes";
+import { useNavigate } from "react-router-dom";
+import { validateAuth } from "../utils/validateAuth";
 
 export function Client() {
   const [clients, useClients] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    validateAuth(navigate);
+
     getAll().then((res) => {
       const transformedData = res.data.map((item: any) => {
         return {
@@ -42,6 +47,7 @@ export function Client() {
       <main className="flex flex-col gap-10 items-center justify-center w-full ">
         <Header title="Hóspede" inputs={_columnTitles} />
         <Table
+          title="Hóspede"
           columnTitles={_columnTitles}
           data={clients}
           deleteFunction={deleteClient}

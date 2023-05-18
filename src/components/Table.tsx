@@ -1,18 +1,23 @@
-import { RiDeleteBinLine } from "react-icons/ri";
-import { HiOutlinePencilAlt } from "react-icons/hi";
-import { MouseEventHandler } from "react";
+import { TrashIcon } from "@radix-ui/react-icons";
+import { Modal } from "./Modal";
 
-type ColumnTitleProps = {
+type TableProps = {
+  title: string;
   columnTitles: Array<string>;
   data: Array<any>;
   deleteFunction: (id: string) => any;
 };
 
-export function Table({ columnTitles, data, deleteFunction }: ColumnTitleProps) {
+export function Table({
+  title,
+  columnTitles,
+  data,
+  deleteFunction,
+}: TableProps) {
   const deleteRow = (e: any, id: string) => {
     e.preventDefault();
     deleteFunction(id);
-  }
+  };
 
   return (
     <table className="w-full">
@@ -33,24 +38,22 @@ export function Table({ columnTitles, data, deleteFunction }: ColumnTitleProps) 
         {data.map((item) => {
           return (
             <tr key={item.id} className="w-full ">
-
-            {Object.keys(item).map((key) => {
-              return (
-                <td className="p-3">{item[key]}</td>
-              );
-            })}
+              {Object.keys(item).map((key) => {
+                return <td className="p-3">{item[key]}</td>;
+              })}
 
               <td className="p-3 space-x-2">
-                <button className="bg-green-500 p-2">
-                  <HiOutlinePencilAlt size={18} className="text-zinc-900" />
-                </button>
+                <Modal title={title} isEdit={true} inputs={columnTitles} />
 
-                <button className="bg-red-500 p-2" onClick={(e) => deleteRow(e, item.id)}>
-                  <RiDeleteBinLine size={18} className="text-zinc-900" />
+                <button
+                  className="bg-red-500 p-2 rounded-md"
+                  onClick={(e) => deleteRow(e, item.id)}
+                >
+                  <TrashIcon height={20} width={20} className="text-zinc-900" />
                 </button>
               </td>
             </tr>
-          )
+          );
         })}
       </tbody>
     </table>

@@ -1,5 +1,4 @@
 import React, { useState, ChangeEvent } from "react";
-
 import { useNavigate } from "react-router-dom";
 
 import { Funcionario } from "../api/funcionarios/FuncionarioModel";
@@ -24,18 +23,18 @@ const Login: React.FC = () => {
 
     const funcionario = {
       username,
-      password
-    }
+      password,
+    };
 
     login(funcionario)
-    .then((res) => {
-      localStorage.setItem('isLogged', "true");
-      navigate("/client")
-    })
-    .catch((err) => {
-      alert(err.response.data);
-    })
-  }
+      .then((res) => {
+        localStorage.setItem("isLogged", "true");
+        navigate("/client");
+      })
+      .catch((err) => {
+        alert(err.response.data);
+      });
+  };
 
   return (
     <div className="flex items-center justify-center h-screen">

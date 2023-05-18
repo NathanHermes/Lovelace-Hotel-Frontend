@@ -4,11 +4,16 @@ import { Navbar } from "../components/Navbar";
 import { Table } from "../components/Table";
 
 import { getAll, deleteById } from "../api/reservas/reservas";
+import { useNavigate } from "react-router-dom";
+import { validateAuth } from "../utils/validateAuth";
 
 export function Booking() {
   const [bookings, useBookings] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    validateAuth(navigate);
+
     getAll().then((res) => {
       const transformedData = res.data.map((item: any) => {
         return {
@@ -46,10 +51,11 @@ export function Booking() {
 
   return (
     <>
-      <Navbar pathActive={"/"} />
+      <Navbar pathActive={"/booking"} />
       <main className="flex flex-col gap-10 items-center justify-center w-full ">
         <Header title="Reserva" inputs={_columnTitles} />
         <Table
+          title="Reserva"
           columnTitles={_columnTitles}
           data={bookings}
           deleteFunction={deleteBooking}

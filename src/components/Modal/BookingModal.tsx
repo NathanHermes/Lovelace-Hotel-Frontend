@@ -1,28 +1,23 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import { Cross2Icon, PlusIcon, Pencil2Icon } from "@radix-ui/react-icons";
+import { Cross2Icon, PlusIcon } from "@radix-ui/react-icons";
+import { useState } from "react";
 
 interface ModalProps {
   title: string;
   isEdit: boolean;
-  inputs: Array<string>;
 }
 
-export function Modal({ title, isEdit, inputs }: ModalProps) {
+export function BookingModal({ title, isEdit }: ModalProps) {
+  const [hospede, useHospede] = useState();
+
   return (
     <Dialog.Root>
-      {isEdit === true ? (
-        <Dialog.Trigger asChild>
-          <button className="bg-green-500 p-2 rounded-md">
-            <Pencil2Icon width={20} height={20} className="text-zinc-900" />
-          </button>
-        </Dialog.Trigger>
-      ) : (
-        <Dialog.Trigger asChild>
-          <button className="bg-amber-500 flex gap-2 items-center justify-center px-3 py-2 rounded-lg font-bold whitespace-nowrap">
-            <PlusIcon /> Add {title}
-          </button>
-        </Dialog.Trigger>
-      )}
+      <Dialog.Trigger asChild>
+        <button className="bg-amber-500 flex gap-2 items-center justify-center px-3 py-2 rounded-lg font-bold whitespace-nowrap">
+          <PlusIcon /> Add {title}
+        </button>
+      </Dialog.Trigger>
+
       <Dialog.Portal>
         <Dialog.Overlay className="bg-[#18181b99] data-[state=open]:animate-overlayShow fixed inset-0" />
 
@@ -32,27 +27,19 @@ export function Modal({ title, isEdit, inputs }: ModalProps) {
             <span className="lowercase">{title}</span>
           </Dialog.Title>
 
-          {inputs.map((input, index) => {
-            return (
-              input !== "ID" && (
-                <fieldset
-                  key={index}
-                  className="mb-[15px] flex items-center gap-5"
-                >
-                  <label
-                    className="text-zinc-900 w-[90px] text-right text-[15px]"
-                    htmlFor={input}
-                  >
-                    {input}
-                  </label>
-                  <input
-                    className="text-zinc-900 inline-flex border-2 border-zinc-500 outline-0 focus:ring-2 focus:ring-amber-500 focus:ring-offset-1 h-[35px] w-full flex-1 items-center justify-center rounded-lg px-[10px] text-base leading-none"
-                    id={input}
-                  />
-                </fieldset>
-              )
-            );
-          })}
+          <fieldset className="mb-[15px] flex items-center gap-5">
+            <label
+              className="text-zinc-900 w-[90px] text-right text-[15px]"
+              htmlFor="hospede"
+            >
+              Hóspede
+            </label>
+            <input
+              className="text-zinc-900 inline-flex border-2 border-zinc-500 outline-0 focus:ring-2 focus:ring-amber-500 focus:ring-offset-1 h-[35px] w-full flex-1 items-center justify-center rounded-lg px-[10px] text-base leading-none"
+              id="hospede"
+              value={hospede}
+            />
+          </fieldset>
 
           <div className="mt-[25px] flex justify-end">
             <Dialog.Close asChild>

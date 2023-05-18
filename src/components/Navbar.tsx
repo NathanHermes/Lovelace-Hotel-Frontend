@@ -12,7 +12,7 @@ interface RoutesProps {
 
 export function Navbar({ pathActive }: NavbarProps) {
   const routes: RoutesProps[] = [
-    { path: "/", name: "Reservas" },
+    { path: "/booking", name: "Reservas" },
     { path: "/client", name: "Hóspedes" },
     { path: "/room", name: "Quartos" },
   ];
