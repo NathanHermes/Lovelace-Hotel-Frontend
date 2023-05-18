@@ -1,13 +1,14 @@
+import { Header } from "../components/Header";
+import { Navbar } from "../components/Navbar";
+
 export function Room() {
   return (
-    <div className="flex">
-      <h1 className="font-black">Hóspedes</h1>
-      <p>
-        Gerencie todos os seus hóspedes existentes ou adicione um novo hóspede.
-      </p>
-
-      <input type="text" />
-      <button>Add Hóspede</button>
-    </div>
+    <>
+      <Navbar pathActive={"/room"} />
+      <main className="flex flex-col gap-10 items-center justify-center w-full ">
+        <Header title="Quarto" />
+        {/* <Table columnTitles={_columnTitles} /> */}
+      </main>
+    </>
   );
 }
