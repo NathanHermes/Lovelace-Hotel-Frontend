@@ -1,16 +1,40 @@
-export function Header() {
+import { FiPlus, FiSearch } from "react-icons/fi";
+
+interface HeaderProps {
+  title: string;
+}
+
+export function Header({ title }: HeaderProps) {
   return (
-    <header>
-      <div>
-        <h1>Booking</h1>
-        <p>
-          Gerencie todos os seus hóspedes existentes ou adicione um novo
-          hóspede.
+    <header className="flex items-end justify-center w-full">
+      <div className="flex flex-col gap-3 items-start justify-center w-full">
+        <h1 className="font-black text-xl">{title}s</h1>
+
+        <p className="text-base text-zinc-700">
+          Gerencie {title === "Reserva" ? "todas as" : "todos os"}{" "}
+          <span className="lowercase">{title}s</span> existentes ou adicione{" "}
+          {title === "Reserva" ? "novas" : "novos"}{" "}
+          <span className="lowercase">{title}s</span>.
         </p>
       </div>
-      <div>
-        <input type="text" />
-        <button>Add Hóspede</button>
+
+      <div className="flex gap-3 items-center justify-end">
+        <div className="border-2 border-zinc-300 flex gap-2 items-center justify-center py-2 px-3 rounded-lg">
+          <FiSearch size={18} className="text-zinc-500" />
+
+          <input
+            type="text"
+            name="search"
+            id="search"
+            placeholder="Busque aqui"
+            className="bg-zinc-50 outline-0 placeholder-zinc-500 rounded-lg text-zinc-900"
+          />
+        </div>
+
+        <button className="bg-amber-500 flex gap-2 items-center justify-center px-3 py-2 rounded-lg font-bold whitespace-nowrap">
+          <FiPlus size={18} className="text-zinc-900" />
+          Add <span className="lowercase">{title}</span>
+        </button>
       </div>
     </header>
   );
