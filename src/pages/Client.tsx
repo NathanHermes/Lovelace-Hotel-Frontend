@@ -9,8 +9,7 @@ export function Client() {
   const [clients, useClients] = useState([]);
 
   useEffect(() => {
-     getAll().then((res) => {
-
+    getAll().then((res) => {
       const transformedData = res.data.map((item: any) => {
         return {
           id: item.id,
@@ -18,31 +17,35 @@ export function Client() {
           cpf: item.cpf,
           email: item.email,
           phone: item.phoneNumber,
-        }
-      })
+        };
+      });
 
       useClients(transformedData);
     });
-   }, []);
+  }, []);
 
-   const deleteClient = (id: string) => {
+  const deleteClient = (id: string) => {
     deleteById(id)
-    .then((res) => {
-      window.location.reload();
-    })
-    .catch((err) => {
-      alert(err.response.data);
-    })
-  }
-  
+      .then((res) => {
+        window.location.reload();
+      })
+      .catch((err) => {
+        alert(err.response.data);
+      });
+  };
+
   const _columnTitles = ["ID", "Nome", "CPF", "Email", "Telefone"];
 
   return (
     <>
       <Navbar pathActive={"/client"} />
       <main className="flex flex-col gap-10 items-center justify-center w-full ">
-        <Header title="Hóspede" />
-        <Table columnTitles={_columnTitles} data={clients} deleteFunction={deleteClient}/>
+        <Header title="Hóspede" inputs={_columnTitles} />
+        <Table
+          columnTitles={_columnTitles}
+          data={clients}
+          deleteFunction={deleteClient}
+        />
       </main>
     </>
   );

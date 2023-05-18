@@ -1,10 +1,12 @@
-import { FiPlus, FiSearch } from "react-icons/fi";
+import { FiSearch } from "react-icons/fi";
+import { Modal } from "./Modal";
 
 interface HeaderProps {
   title: string;
+  inputs: Array<string>;
 }
 
-export function Header({ title }: HeaderProps) {
+export function Header({ title, inputs }: HeaderProps) {
   return (
     <header className="flex items-end justify-center w-full">
       <div className="flex flex-col gap-3 items-start justify-center w-full">
@@ -19,22 +21,26 @@ export function Header({ title }: HeaderProps) {
       </div>
 
       <div className="flex gap-3 items-center justify-end">
-        <div className="border-2 border-zinc-300 flex gap-2 items-center justify-center py-2 px-3 rounded-lg">
-          <FiSearch size={18} className="text-zinc-500" />
+        {title === "Hóspede" && (
+          <div className="border-2 border-zinc-300 flex gap-2 items-center justify-center py-2 px-3 rounded-lg">
+            <FiSearch size={18} className="text-zinc-500" />
 
-          <input
-            type="text"
-            name="search"
-            id="search"
-            placeholder="Busque aqui"
-            className="bg-zinc-50 outline-0 placeholder-zinc-500 rounded-lg text-zinc-900"
-          />
-        </div>
+            <input
+              type="text"
+              name="search"
+              id="search"
+              placeholder="Busque aqui"
+              className="bg-zinc-50 outline-0 placeholder-zinc-500 rounded-lg text-zinc-900"
+            />
+          </div>
+        )}
 
-        <button className="bg-amber-500 flex gap-2 items-center justify-center px-3 py-2 rounded-lg font-bold whitespace-nowrap">
+        <Modal title={title} isEdit={false} inputs={inputs} />
+
+        {/* <button className="bg-amber-500 flex gap-2 items-center justify-center px-3 py-2 rounded-lg font-bold whitespace-nowrap">
           <FiPlus size={18} className="text-zinc-900" />
           Add <span className="lowercase">{title}</span>
-        </button>
+        </button> */}
       </div>
     </header>
   );

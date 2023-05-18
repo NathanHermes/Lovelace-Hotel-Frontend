@@ -16,22 +16,22 @@ export function Room() {
           dailyValue: item.dailyValue,
           roomType: item.roomType,
           bedType: item.bedType,
-        }
-      })
-      
+        };
+      });
+
       useRooms(transformedData);
     });
   }, []);
 
   const deleteRoom = (id: string) => {
     deleteById(id)
-    .then((res) => {
-      window.location.reload();
-    })
-    .catch((err) => {
-      alert(err.response.data);
-    })
-  }
+      .then((res) => {
+        window.location.reload();
+      })
+      .catch((err) => {
+        alert(err.response.data);
+      });
+  };
 
   const _columnTitles = ["ID", "Diária", "Tipo de quarto", "Tipo de cama"];
 
@@ -39,8 +39,12 @@ export function Room() {
     <>
       <Navbar pathActive={"/room"} />
       <main className="flex flex-col gap-10 items-center justify-center w-full ">
-        <Header title="Quarto" />
-        <Table columnTitles={_columnTitles} data={rooms} deleteFunction={deleteRoom}/>
+        <Header title="Quarto" inputs={_columnTitles} />
+        <Table
+          columnTitles={_columnTitles}
+          data={rooms}
+          deleteFunction={deleteRoom}
+        />
       </main>
     </>
   );
