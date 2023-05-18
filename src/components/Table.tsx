@@ -44,10 +44,9 @@ export function Table({ columnTitles }: ColumnTitleProps) {
         {mockBookings.map((booking) => {
           return (
             <tr key={booking.cpf} className="w-full ">
-              <td className="p-3">{booking.name}</td>
-              <td className="p-3">{booking.cpf}</td>
-              <td className="p-3">{booking.email}</td>
-              <td className="p-3">{booking.phone}</td>
+              {Object.entries(booking).map((column) => {
+                return <td className="p-3">{column}</td>;
+              })}
               <td className="p-3">
                 <button>E</button> <button>D</button>
               </td>
