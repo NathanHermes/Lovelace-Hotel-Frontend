@@ -1,11 +1,17 @@
 import { useEffect, useState } from "react";
-import { Header } from "../components/Header";
+import { Header, PageNames } from "../components/Header";
 import { Navbar } from "../components/Navbar";
 import { Table } from "../components/Table";
 
 import { getAll, deleteById, save, update } from "../api/quartos/quartos";
 import { useNavigate } from "react-router-dom";
 import { validateAuth } from "../utils/validateAuth";
+
+export type Room = {
+  dailyValue: number;
+  roomType: string;
+  bedType: string;
+};
 
 export function Room() {
   const [rooms, useRooms]: Array<any> = useState([]);
@@ -28,22 +34,13 @@ export function Room() {
     });
   }, []);
 
-  const deleteRoom = (id: string) => {
-    deleteById(id)
-      .then((res) => {
-        window.location.reload();
-      })
-      .catch((err) => {
-        alert(err.response.data);
-      });
-  };
+  const createRoom = (room: Room) => {
+    console.log(room);
 
-  const addRoom = (newValue: any) => {
-    
     let data = {
-      dailyValue: newValue.Diária,
-      roomType: newValue["Tipo de quarto"],
-      bedType: newValue["Tipo de cama"]
+      // dailyValue: room.Diária,
+      // roomType: room["Tipo de quarto"],
+      // bedType: room["Tipo de cama"],
     };
 
     save(data)
@@ -55,20 +52,30 @@ export function Room() {
       });
   };
 
-  const editRoom = (newValue: any) => {      
+  const deleteRoom = (id: string) => {
+    deleteById(id)
+      .then((res) => {
+        window.location.reload();
+      })
+      .catch((err) => {
+        alert(err.response.data);
+      });
+  };
+
+  const editRoom = (newValue: any) => {
     let data = {
       dailyValue: newValue.Diária,
       roomType: newValue["Tipo de quarto"],
-      bedType: newValue["Tipo de cama"]
+      bedType: newValue["Tipo de cama"],
     };
 
     update(newValue.id, data)
-    .then((res) => {
-      window.location.reload();
-    })
-    .catch((err) => {
-      alert(err.response.data);
-    });
+      .then((res) => {
+        window.location.reload();
+      })
+      .catch((err) => {
+        alert(err.response.data);
+      });
   };
 
   const _columnTitles = ["ID", "Diária", "Tipo de quarto", "Tipo de cama"];
@@ -77,7 +84,11 @@ export function Room() {
     <>
       <Navbar pathActive={"/room"} />
       <main className="flex flex-col gap-10 items-center justify-center w-full ">
-        <Header title="Quarto" inputs={_columnTitles} handleAdd={addRoom}/>
+        <Header
+          title={PageNames.ROOM}
+          inputs={_columnTitles}
+          handleAdd={createRoom}
+        />
         <Table
           title="Quarto"
           columnTitles={_columnTitles}

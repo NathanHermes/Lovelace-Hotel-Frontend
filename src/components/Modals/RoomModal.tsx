@@ -1,26 +1,18 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { Cross2Icon, PlusIcon, Pencil2Icon } from "@radix-ui/react-icons";
-import { Room } from "../pages/Room";
+import { Room } from "../../pages/Room";
+import SelectDemo from "../Select";
 
 interface ModalProps {
-  title: string;
   isEdit: boolean;
-  inputs: Array<string>;
-  action: (object: any) => any;
   rowId?: string;
 }
 
-export function Modal({ title, isEdit, inputs, action, rowId }: ModalProps) {
+export function RoomModal({ isEdit, rowId }: ModalProps) {
   let data: any = {};
 
   const handleActionClick = (event: any) => {
     event.preventDefault();
-
-    switch (title) {
-      case Pages.ROOM:
-        data: Room;
-        break;
-    }
 
     inputs.map((input) => {
       data[input] = document.getElementById(input)?.value;
@@ -46,7 +38,7 @@ export function Modal({ title, isEdit, inputs, action, rowId }: ModalProps) {
       ) : (
         <Dialog.Trigger asChild>
           <button className="bg-amber-500 flex gap-2 items-center justify-center px-3 py-2 rounded-lg font-bold whitespace-nowrap">
-            <PlusIcon /> Add {title}
+            <PlusIcon /> Add Quarto
           </button>
         </Dialog.Trigger>
       )}
@@ -55,31 +47,22 @@ export function Modal({ title, isEdit, inputs, action, rowId }: ModalProps) {
 
         <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-zinc-50 p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
           <Dialog.Title className="text-zinc-900 mb-8 text-base font-medium font-Inter">
-            {isEdit === false ? "Cadastar" : "Editar"}{" "}
-            <span className="lowercase">{title}</span>
+            {isEdit === false ? "Cadastar" : "Editar"} Quarto
           </Dialog.Title>
 
-          {inputs.map((input, index) => {
-            return (
-              input !== "ID" && (
-                <fieldset
-                  key={index}
-                  className="mb-[15px] flex items-center gap-5"
-                >
-                  <label
-                    className="text-zinc-900 w-[90px] text-right text-[15px]"
-                    htmlFor={input}
-                  >
-                    {input}
-                  </label>
-                  <input
-                    className="text-zinc-900 inline-flex border-2 border-zinc-500 outline-0 focus:ring-2 focus:ring-amber-500 focus:ring-offset-1 h-[35px] w-full flex-1 items-center justify-center rounded-lg px-[10px] text-base leading-none"
-                    id={input}
-                  />
-                </fieldset>
-              )
-            );
-          })}
+          <fieldset className="flex flex-col gap-1 items-start justify-center ">
+            <label className="text-base text-zinc-900" htmlFor="dailyValue">
+              Diária
+            </label>
+            <input
+              id="dailyValue"
+              className="border-2 border-zinc-500 flex items-center justify-center outline-0 p-2 rounded-lg text-base text-zinc-900 w-full focus:ring-2 focus:ring-amber-500 focus:ring-offset-1 placeholder:text-zinc-500"
+              placeholder="Informe o valor da diária"
+              type="number"
+            />
+          </fieldset>
+
+          <SelectDemo />
 
           <div className="mt-[25px] flex justify-end">
             <Dialog.Close asChild>
