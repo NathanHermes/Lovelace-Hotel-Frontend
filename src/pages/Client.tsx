@@ -3,7 +3,6 @@ import { Header } from "../components/Header";
 import { Navbar } from "../components/Navbar";
 import { Table } from "../components/Table";
 
-
 import { getAll, deleteById, save } from "../api/hospedes/hospedes";
 import { useNavigate } from "react-router-dom";
 import { validateAuth } from "../utils/validateAuth";
@@ -43,30 +42,31 @@ export function Client() {
   const addClient = (newValue: any) => {
     let data = {
       name: newValue.Nome,
-      surname: "123",
+      surname: newValue.Sobrenome,
       cpf: newValue.CPF,
       email: newValue.Email,
-      phoneNumber: newValue.Telefone
-    }
-    
-    save(data)
-    .then((res: any) => {
-      window.location.reload();
-    })
-    .catch((err: any) => {
-      console.log(err);
+      phoneNumber: newValue.Telefone,
+    };
 
-      alert(err.response.data);
-    });
-  }
+    save(data)
+      .then((res: any) => {
+        window.location.reload();
+      })
+      .catch((err: any) => {
+        console.log(err);
+
+        alert(err.response.data);
+      });
+  };
 
   const _columnTitles = ["ID", "Nome", "CPF", "Email", "Telefone"];
+  const _inputs = ["ID", "Nome", "Sobrenome", "CPF", "Email", "Telefone"];
 
   return (
     <>
       <Navbar pathActive={"/client"} />
       <main className="flex flex-col gap-10 items-center justify-center w-full ">
-        <Header title="Hóspede" inputs={_columnTitles} handleAdd={addClient}/>
+        <Header title="Hóspede" inputs={_inputs} handleAdd={addClient} />
         <Table
           title="Hóspede"
           columnTitles={_columnTitles}
