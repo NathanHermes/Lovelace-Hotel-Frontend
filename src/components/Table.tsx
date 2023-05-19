@@ -6,6 +6,7 @@ type TableProps = {
   columnTitles: Array<string>;
   data: Array<any>;
   deleteFunction: (id: string) => any;
+  editFunction: (object: any) => any;
 };
 
 export function Table({
@@ -13,11 +14,16 @@ export function Table({
   columnTitles,
   data,
   deleteFunction,
+  editFunction
 }: TableProps) {
   const deleteRow = (e: any, id: string) => {
     e.preventDefault();
     deleteFunction(id);
   };
+
+  const editRow = (newValue: any) => {
+    editFunction(newValue);
+  }
 
   return (
     <table className="w-full">
@@ -43,7 +49,7 @@ export function Table({
               })}
 
               <td className="p-3 space-x-2">
-                <Modal title={title} isEdit={true} inputs={columnTitles} />
+                <Modal title={title} isEdit={true} inputs={columnTitles} add={editRow} rowId={item.id}/>
 
                 <button
                   className="bg-red-500 p-2 rounded-md"

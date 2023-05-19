@@ -5,10 +5,11 @@ interface ModalProps {
   title: string;
   isEdit: boolean;
   inputs: Array<string>;
-  add: (object: any) => any
+  add: (object: any) => any;
+  rowId? : string
 }
 
-export function Modal({ title, isEdit, inputs, add }: ModalProps) {
+export function Modal({ title, isEdit, inputs, add, rowId}: ModalProps) {
   const handleClick = (e: any) => {
     e.preventDefault();
     
@@ -18,7 +19,12 @@ export function Modal({ title, isEdit, inputs, add }: ModalProps) {
       data[input] = document.getElementById(input)?.value
     })
 
-    if (!isEdit) {delete data.ID}
+    delete data.ID;
+
+    if (isEdit === true) {
+      data.id = rowId;
+    }
+    
     add(data)
   }
 

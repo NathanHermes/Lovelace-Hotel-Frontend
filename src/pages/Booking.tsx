@@ -3,7 +3,7 @@ import { Header } from "../components/Header";
 import { Navbar } from "../components/Navbar";
 import { Table } from "../components/Table";
 
-import { getAll, deleteById, save } from "../api/reservas/reservas";
+import { getAll, deleteById, save, update } from "../api/reservas/reservas";
 import { useNavigate } from "react-router-dom";
 import { validateAuth } from "../utils/validateAuth";
 
@@ -54,23 +54,21 @@ export function Booking() {
     .catch((err: any) => {
       alert(err.response.data);
     });
-    
   }
 
-  const addClient = (newValue: any) => {
-    let data = {
-      name: newValue.Nome,
-      surname: newValue.Sobrenome,
-      cpf: newValue.CPF,
-      email: newValue.Email,
-      phoneNumber: newValue.Telefone,
-    };
+    const editBooking = (newValue: any) => {      
+      let data = {
+        idClient: newValue.Hóspede,
+        idRoom: newValue.Quarto,
+        startingDate: newValue.Início,
+        finalDate: newValue.Fim,
+      }
 
-    save(data)
-      .then((res: any) => {
+      update(newValue.id, data)
+      .then((res) => {
         window.location.reload();
       })
-      .catch((err: any) => {
+      .catch((err) => {
         alert(err.response.data);
       });
   };
@@ -93,6 +91,7 @@ export function Booking() {
           columnTitles={_columnTitles}
           data={bookings}
           deleteFunction={deleteBooking}
+          editFunction={editBooking}
         />
       </main>
     </>

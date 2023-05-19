@@ -3,7 +3,7 @@ import { Header } from "../components/Header";
 import { Navbar } from "../components/Navbar";
 import { Table } from "../components/Table";
 
-import { getAll, deleteById, save } from "../api/hospedes/hospedes";
+import { getAll, deleteById, save, update } from "../api/hospedes/hospedes";
 import { useNavigate } from "react-router-dom";
 import { validateAuth } from "../utils/validateAuth";
 
@@ -18,7 +18,8 @@ export function Client() {
       const transformedData = res.data.map((item: any) => {
         return {
           id: item.id,
-          name: `${item.name} ${item.surname}`,
+          name: item.name,
+          surname: item.surname,
           cpf: item.cpf,
           email: item.email,
           phone: item.phoneNumber,
@@ -57,7 +58,25 @@ export function Client() {
       });
   };
 
-  const _columnTitles = ["ID", "Nome", "CPF", "Email", "Telefone"];
+  const editClient = (newValue: any) => {      
+    let data = {
+      name: newValue.Nome,
+      surname: newValue.Sobrenome,
+      cpf: newValue.CPF,
+      email: newValue.Email,
+      phoneNumber: newValue.Telefone,
+    };
+
+    update(newValue.id, data)
+    .then((res) => {
+      window.location.reload();
+    })
+    .catch((err) => {
+      alert(err.response.data);
+    });
+  };
+
+  const _columnTitles = ["ID", "Nome", "Sobrenome", "CPF", "Email", "Telefone"];
 
   return (
     <>
@@ -69,6 +88,7 @@ export function Client() {
           columnTitles={_columnTitles}
           data={clients}
           deleteFunction={deleteClient}
+          editFunction={editClient}
         />
       </main>
     </>

@@ -3,7 +3,7 @@ import { Header } from "../components/Header";
 import { Navbar } from "../components/Navbar";
 import { Table } from "../components/Table";
 
-import { getAll, deleteById, save } from "../api/quartos/quartos";
+import { getAll, deleteById, save, update } from "../api/quartos/quartos";
 import { useNavigate } from "react-router-dom";
 import { validateAuth } from "../utils/validateAuth";
 
@@ -55,6 +55,22 @@ export function Room() {
       });
   };
 
+  const editRoom = (newValue: any) => {      
+    let data = {
+      dailyValue: newValue.Diária,
+      roomType: newValue["Tipo de quarto"],
+      bedType: newValue["Tipo de cama"]
+    };
+
+    update(newValue.id, data)
+    .then((res) => {
+      window.location.reload();
+    })
+    .catch((err) => {
+      alert(err.response.data);
+    });
+  };
+
   const _columnTitles = ["ID", "Diária", "Tipo de quarto", "Tipo de cama"];
 
   return (
@@ -67,6 +83,7 @@ export function Room() {
           columnTitles={_columnTitles}
           data={rooms}
           deleteFunction={deleteRoom}
+          editFunction={editRoom}
         />
       </main>
     </>
