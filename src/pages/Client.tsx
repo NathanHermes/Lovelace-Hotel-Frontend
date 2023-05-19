@@ -58,13 +58,12 @@ export function Client() {
   };
 
   const _columnTitles = ["ID", "Nome", "CPF", "Email", "Telefone"];
-  const _inputs = ["ID", "Nome", "Sobrenome", "CPF", "Email", "Telefone"];
 
   return (
     <>
       <Navbar pathActive={"/client"} />
       <main className="flex flex-col gap-10 items-center justify-center w-full ">
-        <Header title="Hóspede" inputs={_inputs} handleAdd={addClient} />
+        <Header title="Hóspede" inputs={_columnTitles} handleAdd={addClient} />
         <Table
           title="Hóspede"
           columnTitles={_columnTitles}

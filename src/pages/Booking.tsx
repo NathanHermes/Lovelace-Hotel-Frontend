@@ -59,6 +59,24 @@ export function Booking() {
     
   }
 
+  const addClient = (newValue: any) => {
+    let data = {
+      name: newValue.Nome,
+      surname: newValue.Sobrenome,
+      cpf: newValue.CPF,
+      email: newValue.Email,
+      phoneNumber: newValue.Telefone,
+    };
+
+    save(data)
+      .then((res: any) => {
+        window.location.reload();
+      })
+      .catch((err: any) => {
+        alert(err.response.data);
+      });
+  };
+
   const _columnTitles = [
     "ID",
     "Hóspede",
