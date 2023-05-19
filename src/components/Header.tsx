@@ -1,15 +1,36 @@
 import { FiSearch } from "react-icons/fi";
 import { Modal } from "./Modal";
+import { Room } from "../pages/Room";
+import { RoomModal } from "./Modals/RoomModal";
 
 interface HeaderProps {
-  title: string;
+  title: PageNames;
   inputs: Array<string>;
-  handleAdd: (object: any) => any
+  handleAdd: (object: Room) => any;
+}
+
+export enum PageNames {
+  BOOKING = "Reserva",
+  CLIENT = "Hóspede",
+  ROOM = "Quarto",
 }
 
 export function Header({ title, inputs, handleAdd }: HeaderProps) {
-  const addNew = (newValue: any) => {
+  const addNew = (newValue: Room) => {
     handleAdd(newValue);
+  };
+
+  function setCreateModal() {
+    switch (title) {
+      case PageNames.BOOKING:
+        break;
+      case PageNames.CLIENT:
+        break;
+      case PageNames.ROOM:
+        return <RoomModal isEdit={false} />;
+      default:
+        break;
+    }
   }
 
   return (
@@ -40,7 +61,7 @@ export function Header({ title, inputs, handleAdd }: HeaderProps) {
           </div>
         )}
 
-        <Modal title={title} isEdit={false} inputs={inputs} add={addNew}/>
+        {setCreateModal()}
 
         {/* <button className="bg-amber-500 flex gap-2 items-center justify-center px-3 py-2 rounded-lg font-bold whitespace-nowrap">
           <FiPlus size={18} className="text-zinc-900" />
