@@ -53,8 +53,6 @@ export function Client() {
         window.location.reload();
       })
       .catch((err: any) => {
-        console.log(err);
-
         alert(err.response.data);
       });
   };

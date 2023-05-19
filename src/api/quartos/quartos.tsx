@@ -2,13 +2,13 @@ import API from "../connection.tsx";
 
 import {Quarto} from "./QuartoModel.tsx";
 
-export async function save(room: Quarto) {
+export async function save(room: any) {
     await API.post('/room/save', {
         ...room
     })
 }
 
-export async function update(id: string ,room: Quarto) {
+export async function update(id: string ,room: any) {
     await API.put(`/room/update/${id}`, {
         ...room
     })

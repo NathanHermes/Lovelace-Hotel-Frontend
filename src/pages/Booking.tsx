@@ -3,7 +3,7 @@ import { Header } from "../components/Header";
 import { Navbar } from "../components/Navbar";
 import { Table } from "../components/Table";
 
-import { getAll, deleteById } from "../api/reservas/reservas";
+import { getAll, deleteById, save } from "../api/reservas/reservas";
 import { useNavigate } from "react-router-dom";
 import { validateAuth } from "../utils/validateAuth";
 
@@ -19,7 +19,6 @@ export function Booking() {
         return {
           id: item.id,
           client: `${item.client.name} ${item.client.surname}`,
-          dailyValue: item.room.dailyValue,
           room: item.room.id,
           start: item.startingDate,
           end: item.finalDate,
@@ -40,11 +39,30 @@ export function Booking() {
       });
   };
 
+  const addBooking = (newValue: any) => {
+    let data = {
+      idClient: newValue.Hóspede,
+      idRoom: newValue.Quarto,
+      startingDate: newValue.Início,
+      finalDate: newValue.Fim,
+    }
+    
+    console.log(data);
+
+    save(data)
+    .then((res: any) => {
+      window.location.reload();
+    })
+    .catch((err: any) => {
+      alert(err.response.data);
+    });
+    
+  }
+
   const _columnTitles = [
     "ID",
     "Hóspede",
-    "Diária",
-    "ID Quarto",
+    "Quarto",
     "Início",
     "Fim",
   ];
@@ -53,7 +71,7 @@ export function Booking() {
     <>
       <Navbar pathActive={"/booking"} />
       <main className="flex flex-col gap-10 items-center justify-center w-full ">
-        <Header title="Reserva" inputs={_columnTitles} />
+        <Header title="Reserva" inputs={_columnTitles} handleAdd={addBooking}/>
         <Table
           title="Reserva"
           columnTitles={_columnTitles}

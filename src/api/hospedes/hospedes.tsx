@@ -8,7 +8,7 @@ export async function save(client: any) {
     })
 }
 
-export async function update(id: string ,client: Hospede) {
+export async function update(id: string ,client: any) {
     await API.put(`/client/update/${id}`, {
         ...client
     })
