@@ -5,9 +5,23 @@ interface ModalProps {
   title: string;
   isEdit: boolean;
   inputs: Array<string>;
+  add: (object: any) => any
 }
 
-export function Modal({ title, isEdit, inputs }: ModalProps) {
+export function Modal({ title, isEdit, inputs, add }: ModalProps) {
+  const handleClick = (e: any) => {
+    e.preventDefault();
+    
+    let data: any = {}
+
+    inputs.map((input) => {
+      data[input] = document.getElementById(input)?.value
+    })
+
+    if (!isEdit) {delete data.ID}
+    add(data)
+  }
+
   return (
     <Dialog.Root>
       {isEdit === true ? (
@@ -56,7 +70,7 @@ export function Modal({ title, isEdit, inputs }: ModalProps) {
 
           <div className="mt-[25px] flex justify-end">
             <Dialog.Close asChild>
-              <button className="bg-green-500 text-zinc-900 inline-flex h-[35px] items-center justify-center rounded-[4px] px-[15px] font-medium leading-none">
+              <button className="bg-green-500 text-zinc-900 inline-flex h-[35px] items-center justify-center rounded-[4px] px-[15px] font-medium leading-none" onClick={handleClick}>
                 Salvar
               </button>
             </Dialog.Close>

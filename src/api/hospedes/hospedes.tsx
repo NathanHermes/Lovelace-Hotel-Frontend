@@ -2,7 +2,7 @@ import API from "../connection.tsx";
 
 import {Hospede} from "./HospedeModel.tsx";
 
-export async function save(client: Hospede) {
+export async function save(client: any) {
     await API.post('/client/save', {
         ...client
     })

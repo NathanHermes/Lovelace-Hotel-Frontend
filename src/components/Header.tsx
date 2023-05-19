@@ -4,9 +4,14 @@ import { Modal } from "./Modal";
 interface HeaderProps {
   title: string;
   inputs: Array<string>;
+  handleAdd: (object: any) => any
 }
 
-export function Header({ title, inputs }: HeaderProps) {
+export function Header({ title, inputs, handleAdd }: HeaderProps) {
+  const addNew = (newValue: any) => {
+    handleAdd(newValue);
+  }
+
   return (
     <header className="flex items-end justify-center w-full">
       <div className="flex flex-col gap-3 items-start justify-center w-full">
@@ -35,7 +40,7 @@ export function Header({ title, inputs }: HeaderProps) {
           </div>
         )}
 
-        <Modal title={title} isEdit={false} inputs={inputs} />
+        <Modal title={title} isEdit={false} inputs={inputs} add={addNew}/>
 
         {/* <button className="bg-amber-500 flex gap-2 items-center justify-center px-3 py-2 rounded-lg font-bold whitespace-nowrap">
           <FiPlus size={18} className="text-zinc-900" />
