@@ -46,8 +46,6 @@ export function Booking() {
       startingDate: newValue.Início,
       finalDate: newValue.Fim,
     }
-    
-    console.log(data);
 
     save(data)
     .then((res: any) => {

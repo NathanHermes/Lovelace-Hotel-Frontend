@@ -46,8 +46,6 @@ export function Room() {
       bedType: newValue["Tipo de cama"]
     };
 
-    console.log(data);
-
     save(data)
       .then((res: any) => {
         window.location.reload();
