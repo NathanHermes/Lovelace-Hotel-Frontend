@@ -1,12 +1,11 @@
 import { FiSearch } from "react-icons/fi";
-import { Modal } from "./Modal";
-import { Room } from "../pages/Room";
 import { RoomModal } from "./Modals/RoomModal";
+import { RoomModel } from "../api/quartos/RoomModel";
 
 interface HeaderProps {
   title: PageNames;
-  inputs: Array<string>;
-  handleAdd: (object: Room) => any;
+  inputs?: Array<string>;
+  action: (room: RoomModel) => void;
 }
 
 export enum PageNames {
@@ -15,11 +14,7 @@ export enum PageNames {
   ROOM = "Quarto",
 }
 
-export function Header({ title, inputs, handleAdd }: HeaderProps) {
-  const addNew = (newValue: Room) => {
-    handleAdd(newValue);
-  };
-
+export function Header({ title, action }: HeaderProps) {
   function setCreateModal() {
     switch (title) {
       case PageNames.BOOKING:
@@ -27,7 +22,7 @@ export function Header({ title, inputs, handleAdd }: HeaderProps) {
       case PageNames.CLIENT:
         break;
       case PageNames.ROOM:
-        return <RoomModal isEdit={false} />;
+        return <RoomModal isEdit={false} action={action} />;
       default:
         break;
     }
