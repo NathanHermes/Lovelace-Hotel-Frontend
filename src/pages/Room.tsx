@@ -1,7 +1,7 @@
-import { findAll, deleteById, save, update } from "../api/quartos/Room";
+import { findAll, deleteById, save, update } from "../api/room/Room";
 import { Header, PageNames } from "../components/Header";
 import { validateAuth } from "../utils/validateAuth";
-import { RoomModel } from "../api/quartos/RoomModel";
+import { RoomModel } from "../api/room/RoomModel";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
 import { useEffect, useState } from "react";
