@@ -1,4 +1,4 @@
-import { RoomModel } from "../api/quartos/RoomModel";
+import { RoomModel } from "../api/room/RoomModel";
 import { TrashIcon } from "@radix-ui/react-icons";
 import { RoomModal } from "./Modals/RoomModal";
 

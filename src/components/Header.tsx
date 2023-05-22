@@ -1,6 +1,6 @@
 import { FiSearch } from "react-icons/fi";
 import { RoomModal } from "./Modals/RoomModal";
-import { RoomModel } from "../api/quartos/RoomModel";
+import { RoomModel } from "../api/room/RoomModel";
 
 interface HeaderProps {
   title: PageNames;
