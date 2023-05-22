@@ -1,4 +1,4 @@
-import { BedType, RoomType } from "../api/quartos/RoomModel";
+import { BedType, RoomType } from "../api/room/RoomModel";
 
 export function converteBedTypeInStringToBedTypeInEnum(enumAsString: string) {
   switch (enumAsString) {
