@@ -1,102 +1,94 @@
-import { useEffect, useState } from "react";
+import { findAll, deleteById, save, update } from "../api/quartos/Room";
 import { Header, PageNames } from "../components/Header";
-import { Navbar } from "../components/Navbar";
-import { Table } from "../components/Table";
-
-import { getAll, deleteById, save, update } from "../api/quartos/quartos";
-import { useNavigate } from "react-router-dom";
 import { validateAuth } from "../utils/validateAuth";
-
-export type Room = {
-  dailyValue: number;
-  roomType: string;
-  bedType: string;
-};
+import { RoomModel } from "../api/quartos/RoomModel";
+import { useNavigate } from "react-router-dom";
+import { Navbar } from "../components/Navbar";
+import { useEffect, useState } from "react";
+import { Table, Titles } from "../components/Table";
+import toast, { Toaster } from "react-hot-toast";
 
 export function Room() {
-  const [rooms, useRooms]: Array<any> = useState([]);
+  const [rooms, setRooms] = useState([]);
+  const _columnTitles = ["ID", "Diária", "Tipo de cama", "Tipo de quarto"];
   const navigate = useNavigate();
 
   useEffect(() => {
     validateAuth(navigate);
+    loadRooms();
+  }, [navigate]);
 
-    getAll().then((res) => {
-      const transformedData = res.data.map((item: any) => {
+  const loadRooms = () => {
+    findAll().then((response) => {
+      const roomsData = response.data.map((room: RoomModel) => {
         return {
-          id: item.id,
-          dailyValue: item.dailyValue,
-          roomType: item.roomType,
-          bedType: item.bedType,
+          id: room.id,
+          dailyValue: room.dailyValue,
+          bedType: room.bedType,
+          roomType: room.roomType,
         };
       });
 
-      useRooms(transformedData);
+      setRooms(roomsData);
     });
-  }, []);
+  };
 
-  const createRoom = (room: Room) => {
-    console.log(room);
-
-    let data = {
-      // dailyValue: room.Diária,
-      // roomType: room["Tipo de quarto"],
-      // bedType: room["Tipo de cama"],
-    };
-
-    save(data)
-      .then((res: any) => {
-        window.location.reload();
+  const createRoom = (room: RoomModel) => {
+    save(room)
+      .then(() => {
+        toast.success("Quarto cadastrado.");
+        loadRooms();
       })
-      .catch((err: any) => {
-        alert(err.response.data);
+      .catch(() => {
+        toast.error(
+          "Não foi possivel cadastrar o quarto.\nTente novamente mais tarde."
+        );
       });
   };
 
-  const deleteRoom = (id: string) => {
+  const updateRoom = (room: RoomModel) => {
+    update(room)
+      .then(() => {
+        toast.success("Quarto atualizado.");
+        loadRooms();
+      })
+      .catch(() => {
+        toast.error(
+          "Não foi possivel atualizar o quarto.\nTente novamente mais tarde."
+        );
+      });
+  };
+
+  function deleteRoom(id: string) {
     deleteById(id)
-      .then((res) => {
-        window.location.reload();
+      .then(() => {
+        toast.success("Quarto apagado.");
+        loadRooms();
       })
-      .catch((err) => {
-        alert(err.response.data);
+      .catch(() => {
+        toast.error(
+          "Não foi possivel apagar o quarto.\nTente novamente mais tarde."
+        );
       });
-  };
-
-  const editRoom = (newValue: any) => {
-    let data = {
-      dailyValue: newValue.Diária,
-      roomType: newValue["Tipo de quarto"],
-      bedType: newValue["Tipo de cama"],
-    };
-
-    update(newValue.id, data)
-      .then((res) => {
-        window.location.reload();
-      })
-      .catch((err) => {
-        alert(err.response.data);
-      });
-  };
-
-  const _columnTitles = ["ID", "Diária", "Tipo de quarto", "Tipo de cama"];
+  }
 
   return (
     <>
       <Navbar pathActive={"/room"} />
+
       <main className="flex flex-col gap-10 items-center justify-center w-full ">
-        <Header
-          title={PageNames.ROOM}
-          inputs={_columnTitles}
-          handleAdd={createRoom}
-        />
+        <Header title={PageNames.ROOM} action={createRoom} />
+
         <Table
-          title="Quarto"
+          title={Titles.ROOM}
           columnTitles={_columnTitles}
           data={rooms}
+          editFunction={updateRoom}
           deleteFunction={deleteRoom}
-          editFunction={editRoom}
         />
       </main>
+
+      <Toaster position="top-right" />
     </>
   );
 }
