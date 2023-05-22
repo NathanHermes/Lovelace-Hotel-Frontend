@@ -1,34 +1,82 @@
-import * as Dialog from "@radix-ui/react-dialog";
+import { converteBedTypeInStringToBedTypeInEnum } from "../../utils/enumConverter";
+import { BedType, RoomModel, RoomType } from "../../api/quartos/RoomModel";
 import { Cross2Icon, PlusIcon, Pencil2Icon } from "@radix-ui/react-icons";
-import { Room } from "../../pages/Room";
-import SelectDemo from "../Select";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as Dialog from "@radix-ui/react-dialog";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 interface ModalProps {
+  action: (room: RoomModel) => void;
   isEdit: boolean;
-  rowId?: string;
+  room?: RoomModel;
 }
 
-export function RoomModal({ isEdit, rowId }: ModalProps) {
-  let data: any = {};
+const createRoomFormSchema = z.object({
+  dailyValue: z
+    .string()
+    .nonempty("Esse campo é obrigatório.")
+    .refine((_dailyValue) => {
+      const _dailyValueInt = parseInt(_dailyValue);
+      return _dailyValueInt > 0;
+    }, "Preço da diária inválido."),
+  roomType: z
+    .string()
+    .toUpperCase()
+    .refine((_roomType) => {
+      return _roomType !== "SELECIONE UM TIPO";
+    }, "Esse campo é obrigatório."),
+  bedType: z
+    .string()
+    .toUpperCase()
+    .refine((_bedType) => {
+      return _bedType !== "SELECIONE UM TIPO";
+    }, "Esse campo é obrigatório."),
+});
 
-  const handleActionClick = (event: any) => {
-    event.preventDefault();
+type CreateRoomFormData = z.infer<typeof createRoomFormSchema>;
 
-    inputs.map((input) => {
-      data[input] = document.getElementById(input)?.value;
-    });
+export function RoomModal({ action, isEdit, room }: ModalProps) {
+  const [open, setOpen] = useState(false);
 
-    delete data.ID;
+  const {
+    formState: { errors },
+    handleSubmit,
+    register,
+    reset,
+    setValue,
+  } = useForm<CreateRoomFormData>({
+    resolver: zodResolver(createRoomFormSchema),
+  });
 
-    if (isEdit === true) {
-      data.id = rowId;
+  useEffect(() => {
+    if (isEdit && room != undefined) {
+      const bedType = converteBedTypeInStringToBedTypeInEnum(room.bedType);
+      const roomType = converteBedTypeInStringToBedTypeInEnum(room.roomType);
+
+      setValue("dailyValue", `${room.dailyValue}`);
+      setValue("bedType", bedType);
+      setValue("roomType", roomType);
     }
+  }, [isEdit, room, setValue]);
 
-    action(data);
-  };
+  function saveRoom(data: CreateRoomFormData) {
+    const _room: RoomModel = {
+      dailyValue: parseInt(data.dailyValue),
+      bedType: data.bedType as BedType,
+      roomType: data.roomType as RoomType,
+    };
+
+    if (isEdit && room != undefined) _room.id = room.id;
+
+    reset();
+    action(_room);
+    setOpen(false);
+  }
 
   return (
-    <Dialog.Root>
+    <Dialog.Root open={open} onOpenChange={setOpen}>
       {isEdit === true ? (
         <Dialog.Trigger asChild>
           <button className="bg-green-500 p-2 rounded-md">
@@ -45,41 +93,144 @@ export function RoomModal({ isEdit, rowId }: ModalProps) {
       <Dialog.Portal>
         <Dialog.Overlay className="bg-[#18181b99] data-[state=open]:animate-overlayShow fixed inset-0" />
 
-        <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-zinc-50 p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
-          <Dialog.Title className="text-zinc-900 mb-8 text-base font-medium font-Inter">
+        <Dialog.Content className="bg-zinc-50 fixed flex flex-col gap-6 max-w-[384px] p-8 rounded-lg top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-full">
+          <Dialog.Title className="text-zinc-900 text-lg font-bold font-Inter">
             {isEdit === false ? "Cadastar" : "Editar"} Quarto
           </Dialog.Title>
 
-          <fieldset className="flex flex-col gap-1 items-start justify-center ">
-            <label className="text-base text-zinc-900" htmlFor="dailyValue">
-              Diária
-            </label>
-            <input
-              id="dailyValue"
-              className="border-2 border-zinc-500 flex items-center justify-center outline-0 p-2 rounded-lg text-base text-zinc-900 w-full focus:ring-2 focus:ring-amber-500 focus:ring-offset-1 placeholder:text-zinc-500"
-              placeholder="Informe o valor da diária"
-              type="number"
-            />
-          </fieldset>
-
-          <SelectDemo />
-
-          <div className="mt-[25px] flex justify-end">
-            <Dialog.Close asChild>
-              <button
-                className="bg-green-500 text-zinc-900 inline-flex h-[35px] items-center justify-center rounded-[4px] px-[15px] font-medium leading-none"
-                onClick={handleActionClick}
+          <form
+            onSubmit={handleSubmit(saveRoom)}
+            className="flex flex-col gap-3 items-center justify-center w-full"
+          >
+            <fieldset className="flex flex-col gap-2 items-start justify-center w-full">
+              <label
+                className="font-medium text-base text-zinc-900"
+                htmlFor="dailyValue"
               >
-                Salvar
-              </button>
-            </Dialog.Close>
-          </div>
+                Diária
+              </label>
+
+              <input
+                id="dailyValue"
+                className="bg-zinc-50 border-2 border-zinc-300 outline-0 p-2 rounded-lg text-base text-zinc-900 w-full focus:ring-2 focus:ring-amber-500 focus:ring-offset-1 placeholder:text-zinc-500"
+                placeholder="Informe o valor da diária"
+                type="number"
+                {...register("dailyValue")}
+              />
+
+              {errors.dailyValue && (
+                <span className="font-medium text-base text-red-500">
+                  {errors.dailyValue.message}
+                </span>
+              )}
+            </fieldset>
+
+            <fieldset className="flex flex-col gap-2 items-start justify-center w-full">
+              <label
+                className="font-medium text-base text-zinc-900"
+                htmlFor="bedType"
+              >
+                Tipo da cama
+              </label>
+
+              <select
+                id="bedType"
+                {...register("bedType")}
+                className="bg-zinc-50 border-2 border-zinc-300 cursor-pointer outline-0 p-2 rounded-lg text-base text-zinc-900 w-full focus:ring-2 focus:ring-amber-500 focus:ring-offset-1 placeholder:text-zinc-500"
+              >
+                <option
+                  value={BedType.UNDEFINED}
+                  className="bg-zinc-50 text-base text-zinc-500"
+                >
+                  {BedType.UNDEFINED}
+                </option>
+                <option
+                  value={BedType.SOLTEIRO}
+                  className="bg-zinc-50 text-base text-zinc-500"
+                >
+                  {BedType.SOLTEIRO}
+                </option>
+                <option
+                  value={BedType.DUPLO_SOLTEIRO}
+                  className="bg-zinc-50 text-base text-zinc-500"
+                >
+                  {BedType.DUPLO_SOLTEIRO}
+                </option>
+                <option
+                  value={BedType.CASAL}
+                  className="bg-zinc-50 text-base text-zinc-500"
+                >
+                  {BedType.CASAL}
+                </option>
+              </select>
+
+              {errors.bedType && (
+                <span className="font-medium text-base text-red-500">
+                  {errors.bedType.message}
+                </span>
+              )}
+            </fieldset>
+
+            <fieldset className="flex flex-col gap-2 items-start justify-center w-full">
+              <label
+                className="font-medium text-base text-zinc-900"
+                htmlFor="roomType"
+              >
+                Tipo do quarto
+              </label>
+
+              <select
+                id="roomType"
+                {...register("roomType")}
+                className="bg-zinc-50 border-2 border-zinc-300 cursor-pointer outline-0 p-2 rounded-lg text-base text-zinc-900 w-full focus:ring-2 focus:ring-amber-500 focus:ring-offset-1 placeholder:text-zinc-500"
+              >
+                <option
+                  value={RoomType.UNDEFINED}
+                  className="bg-zinc-50 text-base text-zinc-500"
+                >
+                  {RoomType.UNDEFINED}
+                </option>
+                <option
+                  value={RoomType.STANDARD}
+                  className="bg-zinc-50 text-base text-zinc-500"
+                >
+                  {RoomType.STANDARD}
+                </option>
+                <option
+                  value={RoomType.MASTER}
+                  className="bg-zinc-50 text-base text-zinc-500"
+                >
+                  {RoomType.MASTER}
+                </option>
+                <option
+                  value={RoomType.DELUXE}
+                  className="bg-zinc-50 text-base text-zinc-500"
+                >
+                  {RoomType.DELUXE}
+                </option>
+              </select>
+
+              {errors.roomType && (
+                <span className="font-medium text-base text-red-500">
+                  {errors.roomType.message}
+                </span>
+              )}
+            </fieldset>
+
+            <button
+              type="submit"
+              className="bg-green-500 font-bold items-center justify-center mt-3 py-2 rounded-lg text-zinc-900 w-full"
+            >
+              Salvar
+            </button>
+          </form>
+
           <Dialog.Close asChild>
             <button
               className="text-violet11 hover:bg-violet4 focus:shadow-violet7 absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:shadow-[0_0_0_2px] focus:outline-none"
               aria-label="Close"
             >
-              <Cross2Icon />
+              <Cross2Icon height={20} width={20} />
             </button>
           </Dialog.Close>
         </Dialog.Content>
