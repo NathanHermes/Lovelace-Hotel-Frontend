@@ -1,5 +1,5 @@
 import { converteBedTypeInStringToBedTypeInEnum } from "../../utils/enumConverter";
-import { BedType, RoomModel, RoomType } from "../../api/quartos/RoomModel";
+import { BedType, RoomModel, RoomType } from "../../api/room/RoomModel";
 import { Cross2Icon, PlusIcon, Pencil2Icon } from "@radix-ui/react-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as Dialog from "@radix-ui/react-dialog";
