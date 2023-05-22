@@ -1,59 +1,105 @@
+import { RoomModel } from "../api/quartos/RoomModel";
 import { TrashIcon } from "@radix-ui/react-icons";
-import { Modal } from "./Modal";
+import { RoomModal } from "./Modals/RoomModal";
 
 type TableProps = {
-  title: string;
+  title: Titles;
   columnTitles: Array<string>;
   data: Array<any>;
-  deleteFunction: (id: string) => any;
-  editFunction: (object: any) => any;
+  editFunction: (object: any) => void;
+  deleteFunction: (id: string) => void;
 };
+
+export enum Titles {
+  BOOKING = "Reserva",
+  CLIENT = "Hóspede",
+  ROOM = "Quarto",
+}
 
 export function Table({
   title,
   columnTitles,
   data,
+  editFunction,
   deleteFunction,
-  editFunction
 }: TableProps) {
-  const deleteRow = (e: any, id: string) => {
-    e.preventDefault();
-    deleteFunction(id);
-  };
-
-  const editRow = (newValue: any) => {
-    editFunction(newValue);
+  function setEditModal(object: object) {
+    switch (title) {
+      case Titles.BOOKING:
+        break;
+      case Titles.CLIENT:
+        break;
+      case Titles.ROOM:
+        return (
+          <RoomModal
+            action={editFunction}
+            isEdit={true}
+            room={object as RoomModel}
+          />
+        );
+      default:
+        break;
+    }
   }
 
   return (
-    <table className="w-full">
-      <thead className="w-full bg-amber-100">
-        <tr className="w-full items-center">
+    <table className="flex flex-col items-center justify-center rounded-lg w-full">
+      <thead className="bg-amber-100 flex items-center justify-between rounded-t-lg w-full">
+        <tr className="flex items-center justify-center w-full">
           {columnTitles.map((title, index) => {
             return index === 0 ? (
-              <td className="px-3 py-3 font-bold rounded-tl-lg">{title}</td>
+              <td
+                key={index}
+                className="flex font-bold items-center justify-start p-3 max-w-[200px] rounded-tl-lg w-full"
+              >
+                {title}
+              </td>
             ) : (
-              <td className="px-3 font-bold py-3">{title}</td>
+              <td
+                key={index}
+                className="flex font-bold items-center justify-start p-3 w-full"
+              >
+                {title}
+              </td>
             );
           })}
-          <td className="rounded-tr-lg font-bold">Ações</td>
+          <td className="flex h-full items-center justify-center max-w-[120px] rounded-tr-lg font-bold w-full">
+            Ações
+          </td>
         </tr>
       </thead>
 
-      <tbody className="w-full py-3">
+      <tbody className="flex flex-col items-center justify-center py-3 w-full">
         {data.map((item) => {
           return (
-            <tr key={item.id} className="w-full ">
-              {Object.keys(item).map((key) => {
-                return <td className="p-3">{item[key]}</td>;
+            <tr
+              key={item["id"]}
+              className="flex items-center justify-center w-full"
+            >
+              {Object.keys(item).map((key, index) => {
+                return key === "id" ? (
+                  <td
+                    key={index}
+                    className="flex items-center justify-start p-3 max-w-[200px] text-zinc-500"
+                  >
+                    <p className="truncate">{item[key]}</p>
+                  </td>
+                ) : (
+                  <td
+                    key={index}
+                    className="flex items-center justify-start p-3 text-zinc-500 w-full"
+                  >
+                    {item[key]}
+                  </td>
+                );
               })}
 
-              <td className="p-3 space-x-2">
-                <Modal title={title} isEdit={true} inputs={columnTitles} add={editRow} rowId={item.id}/>
+              <td className="flex gap-3 items-center justify-center max-w-[120px] p-3 w-full">
+                {setEditModal(item)}
 
                 <button
                   className="bg-red-500 p-2 rounded-md"
-                  onClick={(e) => deleteRow(e, item.id)}
+                  onClick={() => deleteFunction(item["id"])}
                 >
                   <TrashIcon height={20} width={20} className="text-zinc-900" />
                 </button>
