@@ -1,15 +1,15 @@
-import API from "../connection.tsx";
+import { api } from "../connection.tsx";
 
-import {Funcionario} from "./FuncionarioModel.tsx";
+import { Funcionario } from "./FuncionarioModel.tsx";
 
 export async function register(funcionario: Funcionario) {
-    await API.post('/attendant/register', {
-        ...funcionario
-    })
+  await api.post("/attendant/register", {
+    ...funcionario,
+  });
 }
 
 export async function login(funcionario: Funcionario) {
-    await API.post('/attendant/login', {
-        ...funcionario
-    })
+  await api.post("/attendant/login", {
+    ...funcionario,
+  });
 }
