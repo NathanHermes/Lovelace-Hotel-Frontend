@@ -1,6 +1,6 @@
 import { converteBedTypeInStringToBedTypeInEnum } from "../../utils/enumConverter";
-import { BedType, RoomModel, RoomType } from "../../api/room/RoomModel";
 import { Cross2Icon, PlusIcon, Pencil2Icon } from "@radix-ui/react-icons";
+import { BedType, RoomModel, RoomType } from "../../api/room/RoomModel";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useEffect, useState } from "react";
@@ -64,7 +64,7 @@ export function RoomModal({ action, isEdit, room }: ModalProps) {
   function saveRoom(data: CreateRoomFormData) {
     const _room: RoomModel = {
       dailyValue: parseInt(data.dailyValue),
-      bedType: data.bedType as BedType,
+      bedType: data.bedType.replace(" ", "_"),
       roomType: data.roomType as RoomType,
     };
 
@@ -144,18 +144,21 @@ export function RoomModal({ action, isEdit, room }: ModalProps) {
                 >
                   {BedType.UNDEFINED}
                 </option>
+
                 <option
                   value={BedType.SOLTEIRO}
                   className="bg-zinc-50 text-base text-zinc-500"
                 >
                   {BedType.SOLTEIRO}
                 </option>
+
                 <option
                   value={BedType.DUPLO_SOLTEIRO}
                   className="bg-zinc-50 text-base text-zinc-500"
                 >
                   {BedType.DUPLO_SOLTEIRO}
                 </option>
+
                 <option
                   value={BedType.CASAL}
                   className="bg-zinc-50 text-base text-zinc-500"
@@ -190,18 +193,21 @@ export function RoomModal({ action, isEdit, room }: ModalProps) {
                 >
                   {RoomType.UNDEFINED}
                 </option>
+
                 <option
                   value={RoomType.STANDARD}
                   className="bg-zinc-50 text-base text-zinc-500"
                 >
                   {RoomType.STANDARD}
                 </option>
+
                 <option
                   value={RoomType.MASTER}
                   className="bg-zinc-50 text-base text-zinc-500"
                 >
                   {RoomType.MASTER}
                 </option>
+
                 <option
                   value={RoomType.DELUXE}
                   className="bg-zinc-50 text-base text-zinc-500"
