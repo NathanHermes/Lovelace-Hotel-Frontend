@@ -1,11 +1,14 @@
-import { FiSearch } from "react-icons/fi";
+import { Cross2Icon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { RoomModal } from "./Modals/RoomModal";
-import { RoomModel } from "../api/room/RoomModel";
+import { ClientModal } from "./Modals/ClientModal";
+import { BookingModal } from "./Modals/BookingModal";
+import { useState } from "react";
 
 interface HeaderProps {
   title: PageNames;
   inputs?: Array<string>;
-  action: (room: RoomModel) => void;
+  modalAction: (object: any) => void;
+  searchFunction?: (fullname: string, researched: boolean) => void;
 }
 
 export enum PageNames {
@@ -14,19 +17,34 @@ export enum PageNames {
   ROOM = "Quarto",
 }
 
-export function Header({ title, action }: HeaderProps) {
-  function setCreateModal() {
+export function Header({ title, modalAction, searchFunction }: HeaderProps) {
+  const [fullname, setFullname] = useState("");
+  const [researched, setResearched] = useState(false);
+
+  function setModal() {
     switch (title) {
       case PageNames.BOOKING:
-        break;
+        return <BookingModal isEdit={false} action={modalAction} />;
       case PageNames.CLIENT:
-        break;
+        return <ClientModal isEdit={false} action={modalAction} />;
       case PageNames.ROOM:
-        return <RoomModal isEdit={false} action={action} />;
+        return <RoomModal isEdit={false} action={modalAction} />;
       default:
         break;
     }
   }
+
+  const search = (event: any) => {
+    event.preventDefault();
+    setResearched(!researched);
+
+    if (researched) {
+      setFullname("");
+    }
+    if (searchFunction) {
+      searchFunction(fullname, researched);
+    }
+  };
 
   return (
     <header className="flex items-end justify-center w-full">
@@ -41,27 +59,40 @@ export function Header({ title, action }: HeaderProps) {
         </p>
       </div>
 
-      <div className="flex gap-3 items-center justify-end">
+      <div className="flex gap-5 items-center justify-end">
         {title === "Hóspede" && (
-          <div className="border-2 border-zinc-300 flex gap-2 items-center justify-center py-2 px-3 rounded-lg">
-            <FiSearch size={18} className="text-zinc-500" />
+          <div className="flex items-center justify-center">
+            <div className="border-s-2 border-y-2 border-zinc-300 flex items-center justify-center py-2 px-3 rounded-s-lg">
+              <input
+                type="text"
+                name="search"
+                id="search"
+                placeholder="Busque aqui"
+                value={fullname}
+                onChange={(event) => setFullname(event.target.value)}
+                className="bg-zinc-50 outline-0 placeholder-zinc-500 rounded-lg text-zinc-900"
+              />
+            </div>
 
-            <input
-              type="text"
-              name="search"
-              id="search"
-              placeholder="Busque aqui"
-              className="bg-zinc-50 outline-0 placeholder-zinc-500 rounded-lg text-zinc-900"
-            />
+            <button
+              type="submit"
+              className="border-e-2 border-y-2 border-zinc-300 p-2.5 rounded-e-lg"
+              onClick={(event) => search(event)}
+            >
+              {researched ? (
+                <Cross2Icon width={20} height={20} className="text-red-500" />
+              ) : (
+                <MagnifyingGlassIcon
+                  width={20}
+                  height={20}
+                  className="text-zinc-500"
+                />
+              )}
+            </button>
           </div>
         )}
 
-        {setCreateModal()}
-
-        {/* <button className="bg-amber-500 flex gap-2 items-center justify-center px-3 py-2 rounded-lg font-bold whitespace-nowrap">
-          <FiPlus size={18} className="text-zinc-900" />
-          Add <span className="lowercase">{title}</span>
-        </button> */}
+        {setModal()}
       </div>
     </header>
   );
