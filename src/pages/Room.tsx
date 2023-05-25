@@ -1,4 +1,4 @@
-import { findAll, deleteById, save, update } from "../api/room/Room";
+import { deleteById, save, update, findAllRooms } from "../api/room/Room";
 import { Header, PageNames } from "../components/Header";
 import { validateAuth } from "../utils/validateAuth";
 import { RoomModel } from "../api/room/RoomModel";
@@ -9,17 +9,17 @@ import { Table, Titles } from "../components/Table";
 import toast, { Toaster } from "react-hot-toast";
 
 export function Room() {
-  const [rooms, setRooms] = useState([]);
   const _columnTitles = ["ID", "Diária", "Tipo de cama", "Tipo de quarto"];
+  const [rooms, setRooms] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     validateAuth(navigate);
     loadRooms();
-  }, [navigate]);
+  }, [navigate, rooms]);
 
   const loadRooms = () => {
-    findAll().then((response) => {
+    findAllRooms().then((response) => {
       const roomsData = response.data.map((room: RoomModel) => {
         return {
           id: room.id,
@@ -77,7 +77,7 @@ export function Room() {
       <Navbar pathActive={"/room"} />
 
       <main className="flex flex-col gap-10 items-center justify-center w-full ">
-        <Header title={PageNames.ROOM} action={createRoom} />
+        <Header title={PageNames.ROOM} modalAction={createRoom} />
 
         <Table
           title={Titles.ROOM}
