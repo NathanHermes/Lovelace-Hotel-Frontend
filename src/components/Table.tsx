@@ -1,4 +1,5 @@
-import { RoomModel } from "../api/room/RoomModel";
+import { BookingModal } from "./Modals/BookingModal";
+import { ClientModal } from "./Modals/ClientModal";
 import { TrashIcon } from "@radix-ui/react-icons";
 import { RoomModal } from "./Modals/RoomModal";
 
@@ -23,20 +24,18 @@ export function Table({
   editFunction,
   deleteFunction,
 }: TableProps) {
-  function setEditModal(object: object) {
+  function setEditModal(object: any) {
     switch (title) {
       case Titles.BOOKING:
-        break;
-      case Titles.CLIENT:
-        break;
-      case Titles.ROOM:
         return (
-          <RoomModal
-            action={editFunction}
-            isEdit={true}
-            room={object as RoomModel}
-          />
+          <BookingModal action={editFunction} isEdit={true} booking={object} />
         );
+      case Titles.CLIENT:
+        return (
+          <ClientModal action={editFunction} isEdit={true} client={object} />
+        );
+      case Titles.ROOM:
+        return <RoomModal action={editFunction} isEdit={true} room={object} />;
       default:
         break;
     }
@@ -77,21 +76,25 @@ export function Table({
               className="flex items-center justify-center w-full"
             >
               {Object.keys(item).map((key, index) => {
-                return key === "id" ? (
-                  <td
-                    key={index}
-                    className="flex items-center justify-start p-3 max-w-[200px] text-zinc-500"
-                  >
-                    <p className="truncate">{item[key]}</p>
-                  </td>
-                ) : (
-                  <td
-                    key={index}
-                    className="flex items-center justify-start p-3 text-zinc-500 w-full"
-                  >
-                    {item[key]}
-                  </td>
-                );
+                if (key === "id") {
+                  return (
+                    <td
+                      key={index}
+                      className="flex items-center justify-start p-3 max-w-[200px] text-zinc-500"
+                    >
+                      <p className="truncate">{item[key]}</p>
+                    </td>
+                  );
+                } else if (key !== "idClient" && key !== "idRoom") {
+                  return (
+                    <td
+                      key={index}
+                      className="flex items-center justify-start p-3 text-zinc-500 w-full"
+                    >
+                      {item[key]}
+                    </td>
+                  );
+                }
               })}
 
               <td className="flex gap-3 items-center justify-center max-w-[120px] p-3 w-full">
